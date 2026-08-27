@@ -62,7 +62,7 @@ jobs:
               echo "=== Building image ==="
 
               make image \
-                PROFILE=tl-wa901nd \
+                PROFILE=tl-wa701nd-v1 \
                 PACKAGES="\
                   -ip6tables \
                   -iw \
