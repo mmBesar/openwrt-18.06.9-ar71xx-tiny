@@ -112,7 +112,7 @@ jobs:
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hw4-tl-wa701nd-v1-firmware
+          name: tl-wa801nd-v3-firmware
           path: |
             imagebuilder/bin/**/*.bin
             imagebuilder/bin/**/*.trx
