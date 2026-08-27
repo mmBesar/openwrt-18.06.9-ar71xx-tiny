@@ -6,27 +6,71 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download ImageBuilder
+      - name: Build OpenWrt 18.06.9 image
         run: |
-          wget -q https://archive.openwrt.org/releases/18.06.9/targets/ar71xx/tiny/openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64.tar.xz
-          tar xJf openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64.tar.xz
-          mv openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64 imagebuilder
+          docker run --rm \
+            -v "$PWD:/work" \
+            -w /work \
+            debian:10 \
+            bash -euxo pipefail -c '
+              sed -i \
+                -e "s|deb.debian.org/debian|archive.debian.org/debian|g" \
+                -e "s|security.debian.org/debian-security|archive.debian.org/debian-security|g" \
+                -e "/buster-updates/d" \
+                /etc/apt/sources.list
 
-      - name: Build image (matches HW4 package set)
-        working-directory: imagebuilder
+              apt-get -o Acquire::Check-Valid-Until=false update
+
+              DEBIAN_FRONTEND=noninteractive apt-get install -y \
+                build-essential \
+                git \
+                file \
+                wget \
+                tar \
+                xz-utils \
+                python \
+                python2.7 \
+                rsync \
+                unzip \
+                gawk \
+                gettext \
+                libncurses5-dev \
+                zlib1g-dev \
+                libssl-dev \
+                xsltproc
+
+              wget -q \
+                https://archive.openwrt.org/releases/18.06.9/targets/ar71xx/tiny/openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64.tar.xz
+
+              tar xJf \
+                openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64.tar.xz
+
+              mv \
+                openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64 \
+                imagebuilder
+
+              cd imagebuilder
+
+              make image \
+                PROFILE=tl-wa801nd-v3 \
+                PACKAGES="-ip6tables -iw iw-full -kmod-ip6tables -kmod-nf-ipt6 -kmod-nf-reject6 \
+                  -kmod-ppp -kmod-pppoe -kmod-pppox -kmod-slhc -luci -luci-proto-ipv6 \
+                  -luci-proto-ppp -odhcp6c -odhcpd-ipv6only -ppp -ppp-mod-pppoe \
+                  -rpcd-mod-rrdns -wpad-mini wpad uhttpd-mod-ubus" \
+                FILES=../files/
+            '
+
+      - name: Show resulting images
         run: |
-          make FORCE=1 image PROFILE=tl-wa801nd-v3 \
-            PACKAGES="-ip6tables -iw iw-full -kmod-ip6tables -kmod-nf-ipt6 -kmod-nf-reject6 \
-              -kmod-ppp -kmod-pppoe -kmod-pppox -kmod-slhc -luci -luci-proto-ipv6 \
-              -luci-proto-ppp -odhcp6c -odhcpd-ipv6only -ppp -ppp-mod-pppoe \
-              -rpcd-mod-rrdns -wpad-mini wpad uhttpd-mod-ubus" \
-            FILES=../files/
+          ls -lh imagebuilder/bin/ar71xx/*tl-wa801nd-v3*
 
-      - name: Show resulting image size
-        run: ls -la imagebuilder/bin/ar71xx/*tl-wa801nd-v3*
+      - name: Verify wpad is included
+        run: |
+          grep -R '^Package: wpad$' imagebuilder/bin/ar71xx 2>/dev/null || true
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
