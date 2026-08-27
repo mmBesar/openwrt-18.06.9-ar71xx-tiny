@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Build OpenWrt 18.06.9 image
         run: |
@@ -55,8 +56,13 @@ jobs:
 
               cd imagebuilder
 
+              echo "=== Available TL-WA701/901 profiles ==="
+              make info | grep -A10 -B3 -i "wa701\|wa901" || true
+
+              echo "=== Building image ==="
+
               make image \
-                PROFILE=tl-wa701nd-v1 \
+                PROFILE=tl-wa901nd \
                 PACKAGES="\
                   -ip6tables \
                   -iw \
@@ -91,18 +97,24 @@ jobs:
                 FILES=../files/
             '
 
-      - name: Show resulting images
+      - name: Show generated firmware
         run: |
-          echo "=== Generated firmware ==="
+          echo "=== ImageBuilder output ==="
+          find imagebuilder/bin -type f -ls
+
+          echo
+          echo "=== Firmware images ==="
           find imagebuilder/bin \
             -type f \
-            -name '*tl-wa701nd-v1*' \
-            -ls
+            \( -name '*.bin' -o -name '*.trx' -o -name '*.img' \) \
+            -print
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hw4-firmware
+          name: hw4-tl-wa701nd-v1-firmware
           path: |
-            imagebuilder/bin/**/tl-wa701nd-v1*.bin
+            imagebuilder/bin/**/*.bin
+            imagebuilder/bin/**/*.trx
+            imagebuilder/bin/**/*.img
           if-no-files-found: error
