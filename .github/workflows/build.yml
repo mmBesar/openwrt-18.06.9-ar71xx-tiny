@@ -15,10 +15,10 @@ jobs:
           tar xJf openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64.tar.xz
           mv openwrt-imagebuilder-18.06.9-ar71xx-tiny.Linux-x86_64 imagebuilder
 
-      - name: Build image (matches HW4 package set)
+      - name: Build image (full wpad + matching HW4 packages)
         working-directory: imagebuilder
         run: |
-          make image PROFILE=tl-wa801nd-v3 \
+          FORCE=1 make image PROFILE=tl-wa801nd-v3 \
             PACKAGES="-ip6tables -iw iw-full -kmod-ip6tables -kmod-nf-ipt6 -kmod-nf-reject6 \
               -kmod-ppp -kmod-pppoe -kmod-pppox -kmod-slhc -luci -luci-proto-ipv6 \
               -luci-proto-ppp -odhcp6c -odhcpd-ipv6only -ppp -ppp-mod-pppoe \
