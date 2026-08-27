@@ -1,4 +1,4 @@
-name: Build HW3 firmware (matches HW4 config)
+name: Build tl-wa801nd-v3
 
 on:
   workflow_dispatch:
