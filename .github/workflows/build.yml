@@ -93,14 +93,13 @@ jobs:
 
       - name: Show resulting images
         run: |
-          find imagebuilder/bin \
-            -type f \
-            -name '*tl-wa801nd-v3*' \
-            -ls
+          echo "=== ImageBuilder output ==="
+          find imagebuilder/bin -type f -ls
 
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
           name: hw3-firmware
           path: |
-            imagebuilder/bin/targets/ar71xx/tiny/*tl-wa801nd-v3*.bin
+            imagebuilder/bin/**/tl-wa801nd-v3*.bin
+          if-no-files-found: error
