@@ -1,4 +1,4 @@
-name: Build tl-wa801nd-v3
+name: Build firmware (TL-WA801ND v3)
 
 on:
   workflow_dispatch:
@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Build OpenWrt 18.06.9 image
         run: |
@@ -55,6 +56,11 @@ jobs:
 
               cd imagebuilder
 
+              echo "=== Available TL-WA701/901 profiles ==="
+              make info | grep -A10 -B3 -i "wa701\|wa901" || true
+
+              echo "=== Building image ==="
+
               make image \
                 PROFILE=tl-wa801nd-v3 \
                 PACKAGES="\
@@ -91,15 +97,24 @@ jobs:
                 FILES=../files/
             '
 
-      - name: Show resulting images
+      - name: Show generated firmware
         run: |
           echo "=== ImageBuilder output ==="
           find imagebuilder/bin -type f -ls
 
+          echo
+          echo "=== Firmware images ==="
+          find imagebuilder/bin \
+            -type f \
+            \( -name '*.bin' -o -name '*.trx' -o -name '*.img' \) \
+            -print
+
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: hw3-firmware
+          name: hw4-tl-wa701nd-v1-firmware
           path: |
-            imagebuilder/bin/**/tl-wa801nd-v3*.bin
+            imagebuilder/bin/**/*.bin
+            imagebuilder/bin/**/*.trx
+            imagebuilder/bin/**/*.img
           if-no-files-found: error
