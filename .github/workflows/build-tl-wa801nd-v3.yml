@@ -58,6 +58,8 @@ jobs:
               make image \
                 PROFILE=tl-wa801nd-v3 \
                 PACKAGES="\
+                  -kmod-gpio-button-hotplug \
+                  -uboot-envtools \
                   -firewall \
                   -ip6tables \
                   -iptables \
