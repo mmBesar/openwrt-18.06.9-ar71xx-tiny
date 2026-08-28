@@ -58,16 +58,27 @@ jobs:
               make image \
                 PROFILE=tl-wa701nd-v1 \
                 PACKAGES="\
+                  -kmod-gpio-button-hotplug \
+                  -uboot-envtools \
+                  -firewall \
                   -ip6tables \
+                  -iptables \
                   -iw \
                   -kmod-ip6tables \
+                  -kmod-ipt-core \
+                  -kmod-ipt-nat \
+                  -kmod-ipt-conntrack \
+                  -kmod-nf-conntrack \
                   -kmod-nf-ipt6 \
+                  -kmod-nf-nat \
+                  -kmod-nf-reject \
                   -kmod-nf-reject6 \
                   -kmod-ppp \
                   -kmod-pppoe \
                   -kmod-pppox \
                   -kmod-slhc \
                   -luci \
+                  -luci-app-firewall \
                   -luci-proto-ipv6 \
                   -luci-proto-ppp \
                   -odhcp6c \
@@ -76,7 +87,18 @@ jobs:
                   -ppp-mod-pppoe \
                   -rpcd-mod-rrdns \
                   -wpad-mini \
-                  wpad-mesh-openssl" \
+                  -wpad \
+                  wpad-mesh-wolfssl \
+                  uhttpd-mod-ubus \
+                  libiwinfo \
+                  libiwinfo-lua \
+                  liblucihttp-lua \
+                  luci-base \
+                  luci-lib-ip \
+                  luci-lib-jsonc \
+                  luci-lib-nixio \
+                  luci-mod-admin-full \
+                  luci-theme-bootstrap" \
                 FILES=../files/
             '
 
@@ -84,7 +106,7 @@ jobs:
         run: |
           find imagebuilder/bin \
             -type f \
-            -name '*tl-wa801nd-v3*' \
+            -name '*tl-wa701nd-v1*' \
             -ls
 
       - name: Upload firmware artifact
@@ -92,4 +114,4 @@ jobs:
         with:
           name: tl-wa701nd-v1
           path: |
-            imagebuilder/bin/targets/ar71xx/tiny/*tl-wa801nd-v3*.bin
+            imagebuilder/bin/targets/ar71xx/tiny/*tl-wa701nd-v1*.bin
