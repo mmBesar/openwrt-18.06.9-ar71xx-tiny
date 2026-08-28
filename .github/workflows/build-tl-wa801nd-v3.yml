@@ -76,8 +76,7 @@ jobs:
                   -ppp \
                   -ppp-mod-pppoe \
                   -rpcd-mod-rrdns \
-                  -wpad-mini \
-                  wpad-basic \
+                  wpad-mini \
                   uhttpd-mod-ubus \
                   libiwinfo \
                   libiwinfo-lua \
