@@ -85,6 +85,7 @@ jobs:
                   luci-lib-jsonc \
                   luci-lib-nixio \
                   luci-mod-admin-full \
+                  luci-app-firewall \
                   luci-theme-bootstrap" \
                 FILES=../files/
             '
