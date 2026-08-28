@@ -77,7 +77,7 @@ jobs:
                   -rpcd-mod-rrdns \
                   -wpad-mini \
                   -wpad \
-                  wpad-mesh-openssl \
+                  wpad-mesh-wolfssl \
                   uhttpd-mod-ubus \
                   libiwinfo \
                   libiwinfo-lua \
