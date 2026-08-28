@@ -76,10 +76,7 @@ jobs:
                   -ppp-mod-pppoe \
                   -rpcd-mod-rrdns \
                   -wpad-mini \
-                  wpad-mesh-openssl \
-                  uhttpd-mod-ubus \
-                  libiwinfo \
-                  libiwinfo-lua \
+                  wpad-mesh-openssl" \
                 FILES=../files/
             '
 
