@@ -80,14 +80,6 @@ jobs:
                   uhttpd-mod-ubus \
                   libiwinfo \
                   libiwinfo-lua \
-                  liblucihttp-lua \
-                  luci-app-firewall \
-                  luci-base \
-                  luci-lib-ip \
-                  luci-lib-jsonc \
-                  luci-lib-nixio \
-                  luci-mod-admin-full \
-                  luci-theme-bootstrap" \
                 FILES=../files/
             '
 
