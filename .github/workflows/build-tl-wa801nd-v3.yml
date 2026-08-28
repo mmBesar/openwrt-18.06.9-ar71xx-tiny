@@ -58,7 +58,6 @@ jobs:
               make image \
                 PROFILE=tl-wa801nd-v3 \
                 PACKAGES="\
-                PACKAGES="\
                   -ip6tables \
                   -iw \
                   -kmod-ip6tables \
