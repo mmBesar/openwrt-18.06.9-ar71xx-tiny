@@ -58,16 +58,25 @@ jobs:
               make image \
                 PROFILE=tl-wa801nd-v3 \
                 PACKAGES="\
+                  -firewall \
                   -ip6tables \
+                  -iptables \
                   -iw \
                   -kmod-ip6tables \
+                  -kmod-ipt-core \
+                  -kmod-ipt-nat \
+                  -kmod-ipt-conntrack \
+                  -kmod-nf-conntrack \
                   -kmod-nf-ipt6 \
+                  -kmod-nf-nat \
+                  -kmod-nf-reject \
                   -kmod-nf-reject6 \
                   -kmod-ppp \
                   -kmod-pppoe \
                   -kmod-pppox \
                   -kmod-slhc \
                   -luci \
+                  -luci-app-firewall \
                   -luci-proto-ipv6 \
                   -luci-proto-ppp \
                   -odhcp6c \
@@ -82,7 +91,6 @@ jobs:
                   libiwinfo \
                   libiwinfo-lua \
                   liblucihttp-lua \
-                  luci-app-firewall \
                   luci-base \
                   luci-lib-ip \
                   luci-lib-jsonc \
